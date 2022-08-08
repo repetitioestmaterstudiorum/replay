@@ -1,0 +1,8 @@
+{
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.history": true,
+    ".meteor/local": true,
+    "package-lock.json": true
+  }
+}

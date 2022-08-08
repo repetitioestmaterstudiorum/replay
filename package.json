@@ -3,12 +3,15 @@
   "author": "repetitioestmaterstudiorum",
   "license": "MIT",
   "scripts": {
-    "dev": "meteor --exclude-archs web.browser.legacy",
-    "test": "vitest",
-    "test:mocha": "meteor test --once --driver-package meteortesting:mocha",
+    "dev": "export $(grep -v '^#' .env | xargs) && meteor --exclude-archs web.browser.legacy",
+    "test": "BROWSERSLIST_IGNORE_OLD_DATA=1 meteor test --once --driver-package meteortesting:mocha",
+    "test:watch": "BROWSERSLIST_IGNORE_OLD_DATA=1 meteor test --driver-package meteortesting:mocha",
+    "test:app": "BROWSERSLIST_IGNORE_OLD_DATA=1 TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
+    "test:vitest": "vitest",
     "test:full": "npm run lint && npm run tsc && npm test",
     "lint": "eslint imports/**/*.ts",
-    "tsc": "tsc -p tsconfig.json"
+    "tsc": "tsc -p tsconfig.json",
+    "reset": "meteor reset && rm -rf node_modules/ && rm package-lock.json && meteor npm i"
   },
   "engines": {
     "node": "^16"
@@ -18,22 +21,21 @@
     "lodash": "^4.17.21",
     "meteor-node-stubs": "^1.2.1",
     "mongodb": "^4.8.1",
+    "mongodb-memory-server": "^8.8.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.182",
     "@types/meteor": "^1.4.87",
+    "@types/mocha": "^9.1.1",
     "@types/react": "^17.0.43",
     "@types/react-dom": "^17.0.14",
     "@typescript-eslint/eslint-plugin": "^5.32.0",
     "@typescript-eslint/parser": "^5.32.0",
-    "dotenv": "^16.0.1",
     "eslint": "^8.21.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "meteor-jest-stubs": "git+https://github.com/tomscholz/meteor-jest-stubs.git",
-    "mongodb-memory-server": "^8.8.0",
     "prettier": "^2.7.1",
     "typescript": "^4.6.3",
     "vitest": "^0.21.0"
@@ -42,6 +44,7 @@
     "mainModule": {
       "client": "client/main.tsx",
       "server": "server/main.ts"
-    }
+    },
+    "testModule": "tests/main.test.ts"
   }
 }

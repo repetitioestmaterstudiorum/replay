@@ -1,19 +1,20 @@
 import { Meteor } from 'meteor/meteor'
-import { LinksCollection } from '/imports/api/links'
+import { C } from '/imports/startup/server/server-constants'
 
-function insertLink(title: string, url: string) {
-	LinksCollection.insert({ title, url, createdAt: new Date() })
-}
+// ---
 
-Meteor.startup(() => {
-	// If the Links collection is empty, add some data.
-	if (LinksCollection.find().count() === 0) {
-		insertLink('Do the Tutorial', 'https://www.meteor.com/tutorials/react/creating-an-app')
+// import all publications, methods, and fixtures
+import '/imports/api/publications'
+import '/imports/api/meteor-methods'
+import '/imports/api/fixtures'
 
-		insertLink('Follow the Guide', 'http://guide.meteor.com')
+Meteor.startup(async () => {
+	console.info('--- startup server')
 
-		insertLink('Read the Docs', 'https://docs.meteor.com')
-
-		insertLink('Discussions', 'https://forums.meteor.com')
+	if (!Accounts.findUserByUsername(C.defaultAdmin.username)) {
+		Accounts.createUser({
+			username: C.defaultAdmin.username,
+			password: C.defaultAdmin.password,
+		})
 	}
 })

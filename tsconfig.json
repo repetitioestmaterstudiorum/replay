@@ -33,6 +33,6 @@
     "esModuleInterop": true,
     "preserveSymlinks": true
   },
-  "include": ["imports", "server", "client", "tests", "vitest.config.ts"],
+  "include": ["server/main.ts", "client/main.tsx", "imports", "tests"],
   "exclude": ["./.meteor/**", "./packages/**", "node_modules"]
 }

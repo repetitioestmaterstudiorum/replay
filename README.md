@@ -31,7 +31,7 @@ Implementing core update operations (or using a package) is an option, but requi
 
 ### Solution
 
-An simpler solution that is very robust and requires little to no maintenance is to use https://www.npmjs.com/package/mongodb-memory-server and create an in-momory server to apply modifications. A lookup procedure with timestamp then looks like this:
+A simpler solution that is very robust and requires little to no maintenance is to use https://www.npmjs.com/package/mongodb-memory-server and create an in-momory server to apply modifications. A lookup procedure with timestamp then looks like this:
 
 -   the custom find method gets all elements from the history that have a timestamp lower than the parameter's timestamp
 -   the initial document is inserted into the in-memory db

@@ -4,26 +4,25 @@
   "license": "MIT",
   "scripts": {
     "dev": "export $(grep -v '^#' .env | xargs) && meteor --exclude-archs web.browser.legacy",
-    "test": "BROWSERSLIST_IGNORE_OLD_DATA=1 meteor test --once --driver-package meteortesting:mocha",
-    "test:watch": "BROWSERSLIST_IGNORE_OLD_DATA=1 meteor test --driver-package meteortesting:mocha",
+    "test": "BROWSERSLIST_IGNORE_OLD_DATA=1 meteor test --driver-package meteortesting:mocha",
     "test:app": "BROWSERSLIST_IGNORE_OLD_DATA=1 TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
-    "test:vitest": "vitest",
     "test:full": "npm run lint && npm run tsc && npm test",
     "lint": "eslint imports/**/*.ts",
     "tsc": "tsc -p tsconfig.json",
-    "reset": "meteor reset && rm -rf node_modules/ && rm package-lock.json && meteor npm i"
+    "reset": "meteor reset && rimraf package-lock.json && rimraf node_modules/  && meteor npm i"
   },
   "engines": {
     "node": "^16"
   },
   "dependencies": {
     "@babel/runtime": "^7.17.9",
+    "bcrypt": "^5.1.0",
     "lodash": "^4.17.21",
     "meteor-node-stubs": "^1.2.1",
-    "mongodb": "^4.8.1",
     "mongodb-memory-server": "^8.8.0",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^6.4.2"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.182",
@@ -37,8 +36,8 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.7.1",
-    "typescript": "^4.6.3",
-    "vitest": "^0.21.0"
+    "rimraf": "^3.0.2",
+    "typescript": "^4.6.3"
   },
   "meteor": {
     "mainModule": {

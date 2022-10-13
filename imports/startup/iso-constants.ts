@@ -13,9 +13,6 @@ const constants = {
 		isTest: process.env.NODE_ENV === 'test',
 		isProd: process.env.NODE_ENV === 'production',
 	},
-	db: {
-		uri: process.env.MONGO_URI || 'mongodb://localhost:3001',
-	},
 }
 
 export const C = Object.freeze(constants)

@@ -33,6 +33,5 @@
     "esModuleInterop": true,
     "preserveSymlinks": true
   },
-  "include": ["server/main.ts", "client/main.tsx", "imports", "tests"],
   "exclude": ["./.meteor/**", "./packages/**", "node_modules"]
 }

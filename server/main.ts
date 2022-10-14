@@ -4,9 +4,9 @@ import { C } from '/imports/startup/server/server-constants'
 // ---
 
 // import all publications, methods, and fixtures
-import '/imports/api/publications'
-import '/imports/api/meteor-methods'
-import '/imports/api/fixtures'
+import '/imports/startup/server/publications/publications'
+import '/imports/startup/server/methods/server-methods'
+import '/imports/startup/server/fixtures/fixtures'
 
 Meteor.startup(async () => {
 	console.info('--- startup server')

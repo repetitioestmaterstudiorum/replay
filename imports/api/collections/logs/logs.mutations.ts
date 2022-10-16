@@ -1,13 +1,9 @@
-import { createMethod } from 'meteor/zodern:relay'
-import { LogsCollection, logsSchema } from '/imports/api/logs/logs.collection'
+import { LogsCollection } from '/imports/api/collections/logs/logs.collection'
+import { Log } from '/imports/api/collections/logs/logs.types'
 
 // ---
 
-export const insertLog = createMethod({
-	name: 'insertLog',
-	schema: logsSchema,
-	async run(log) {
-		// TODO replace with general insert method
-		return await LogsCollection.insert(log)
-	},
-})
+export async function insertLog(log: Log) {
+	// TODO replace with general insert method
+	return await LogsCollection.insert(log)
+}

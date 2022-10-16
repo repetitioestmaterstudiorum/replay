@@ -1,13 +1,13 @@
 import { Mongo } from 'meteor/mongo'
-import { Log } from '/imports/api/logs/logs.types'
+import { Log } from '/imports/api/collections/logs/logs.types'
 import { z } from 'zod'
-import { C } from '/imports/startup/iso-constants'
+import { ensureIndexes } from '../../db/ensure-indexes'
 
 // ---
 
 export const LogsCollection = new Mongo.Collection<Log>('logs')
 
-C.collections.logs.idxs.forEach(idx => LogsCollection.createIndex(idx.key, idx.options))
+ensureIndexes(LogsCollection, 'logs')
 
 export const logsSchema = z.object({
 	text: z.string(),

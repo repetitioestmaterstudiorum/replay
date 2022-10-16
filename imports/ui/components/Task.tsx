@@ -19,12 +19,10 @@ export function Task({ task }: { task: Task }) {
 			<input
 				type="checkbox"
 				checked={!!task.isChecked}
-				// onClick={() => taskToggleChecked({ taskId: task._id, isChecked: task.isChecked })}
 				onClick={() => toggleChecked(task._id, task.isChecked)}
 				readOnly
 			/>
 			<span>{task.text}</span>
-			{/* <button onClick={() => deleteTask({ taskId: task._id })}>&times;</button> */}
 			<button onClick={() => deleteTask(task._id)}>&times;</button>
 		</li>
 	)

@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { DefaultDbFields } from '/imports/api/db/db.types'
-import { logsSchema } from '/imports/api/logs/logs.collection'
+import { logsSchema } from '/imports/api/collections/logs/logs.collection'
 
 // ---
 

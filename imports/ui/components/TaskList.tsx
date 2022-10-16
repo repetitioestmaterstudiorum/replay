@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useTracker } from 'meteor/react-meteor-data'
 import { TasksCollection } from '/imports/api/collections/tasks/tasks.collection'
-import { Task as TaskType } from '/imports/api/collections/tasks/tasks.types'
+import type { Task as TaskType } from '/imports/api/collections/tasks/tasks.types'
 import { AddTask } from '/imports/ui/components/AddTask'
 import { Task } from '/imports/ui/components/Task'
 

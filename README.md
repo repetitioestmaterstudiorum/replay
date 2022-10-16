@@ -41,9 +41,10 @@ A simpler solution that is very robust and requires little to no maintenance is 
 
 ## Leanings
 
-### https://github.com/zodern/meteor-relay package
+### meteor-relay package
 
--   one file per method is required, otherwise there will be "<imported function> already declared" error when importing the same code, e.g. auth stuff like checkLoggedIn(), in several methods in the same file
--   the meteor methods need to be in a /methods directory to ensure methods are rewritten in the client bundle
+-   https://github.com/zodern/meteor-relay
+-   one file per method is required, otherwise there will be "{the imported function} is already declared" error when importing the same code, e.g. auth stuff like checkLoggedIn(), in several methods in the same file
+-   the meteor methods need to be in a `/methods` directory to ensure methods are rewritten in the client bundle
 -   `stub: true` will enable the method on the client as well
 -   `stub() {}` can replace the server side method on the client with something simpler

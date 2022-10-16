@@ -1,7 +1,7 @@
 import { Mongo } from 'meteor/mongo'
-import { Task } from '/imports/api/collections/tasks/tasks.types'
+import type { Task } from '/imports/api/collections/tasks/tasks.types'
 import { z } from 'zod'
-import { ensureIndexes } from '../../db/ensure-indexes'
+import { ensureIndexes } from '/imports/api/db/ensure-indexes'
 
 // ---
 

@@ -1,6 +1,6 @@
 import { createMethod } from 'meteor/zodern:relay'
 import { z } from 'zod'
-import { checkUsersTask } from '/imports/startup/meteor-methods/auth'
+import { checkUsersTask } from '/imports/api/meteor-methods/auth'
 import { updateTask } from '/imports/api/collections/tasks/tasks.mutations'
 
 // ---

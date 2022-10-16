@@ -1,7 +1,7 @@
 import { Mongo } from 'meteor/mongo'
-import { Log } from '/imports/api/collections/logs/logs.types'
+import type { Log } from '/imports/api/collections/logs/logs.types'
 import { z } from 'zod'
-import { ensureIndexes } from '../../db/ensure-indexes'
+import { ensureIndexes } from '/imports/api/db/ensure-indexes'
 
 // ---
 

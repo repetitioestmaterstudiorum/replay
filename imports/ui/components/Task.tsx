@@ -1,7 +1,7 @@
 import React from 'react'
 import { deleteTaskMM } from '/imports/api/collections/tasks/methods/deleteTaskMM'
 import { toggleDoneTaskMM } from '/imports/api/collections/tasks/methods/toggleDoneTaskMM'
-import { Task } from '/imports/api/collections/tasks/tasks.types'
+import type { Task } from '/imports/api/collections/tasks/tasks.types'
 
 // ---
 

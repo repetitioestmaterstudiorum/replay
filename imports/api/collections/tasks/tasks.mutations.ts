@@ -1,20 +1,18 @@
+import { insert, update } from '/imports/api/collections/generic-collection-helpers'
 import { TasksCollection } from '/imports/api/collections/tasks/tasks.collection'
 import type { Task } from '/imports/api/collections/tasks/tasks.types'
 
 // ---
 
 export async function insertTask({ userId, text }: Pick<Task, 'userId' | 'text'>) {
-	// TODO use generic insert method
-	const insertedDocId = await TasksCollection.insert({
+	return await insert<Task>(TasksCollection, {
 		userId,
 		text,
 		isChecked: false,
 		isDeleted: false,
 	})
-	return insertedDocId
 }
 
 export async function updateTask(taskId: string, modifier: Mongo.Modifier<Task>) {
-	// TODO replace with general update method
-	return await TasksCollection.update({ _id: taskId }, modifier)
+	return await update<Task>(TasksCollection, { _id: taskId }, modifier)
 }

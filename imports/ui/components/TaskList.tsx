@@ -30,8 +30,7 @@ export function TaskList() {
 	})
 
 	return isLoading ? (
-		// TODO create loader component
-		<p>Loading ...</p>
+		<h2>Loading :)</h2>
 	) : (
 		<div>
 			<AddTask />

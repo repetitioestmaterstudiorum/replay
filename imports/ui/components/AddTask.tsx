@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { insertTaskMM } from '/imports/api/collections/tasks/methods/insertTaskMM'
 
 // ---
 
@@ -9,7 +10,7 @@ export function AddTask() {
 		e.preventDefault()
 		if (!text) return
 
-		Meteor.call('tasks.insert', text)
+		insertTaskMM({ text })
 		setText('')
 	}
 

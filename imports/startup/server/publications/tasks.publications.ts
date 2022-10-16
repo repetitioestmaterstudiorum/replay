@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor'
-import { TasksCollection } from '/imports/api/tasks/tasks.collection'
+import { TasksCollection } from '/imports/api/collections/tasks/tasks.collection'
 
 // ---
 

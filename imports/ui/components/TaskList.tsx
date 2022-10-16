@@ -1,13 +1,16 @@
 import React, { useState } from 'react'
 import { useTracker } from 'meteor/react-meteor-data'
-import { TasksCollection } from '/imports/api/tasks/tasks.collection'
-import { Task } from '/imports/api/tasks/tasks.types'
+import { TasksCollection } from '/imports/api/collections/tasks/tasks.collection'
+import { Task as TaskType } from '/imports/api/collections/tasks/tasks.types'
 import { AddTask } from '/imports/ui/components/AddTask'
+import { Task } from '/imports/ui/components/Task'
+
+// ---
 
 export function TaskList() {
 	const [hideCompleted, setHideCompleted] = useState(true)
 
-	type TrackerReturns = { tasks: Task[] | []; isLoading?: boolean }
+	type TrackerReturns = { tasks: TaskType[] | []; isLoading?: boolean }
 
 	const { tasks, isLoading }: TrackerReturns = useTracker(() => {
 		const noDataAvailable = { tasks: [] }
@@ -39,32 +42,9 @@ export function TaskList() {
 			</div>
 			<ul>
 				{tasks.map(task => (
-					<OneTask key={task._id} task={task} />
+					<Task key={task._id} task={task} />
 				))}
 			</ul>
 		</div>
-	)
-}
-
-function OneTask({ task }: { task: Task }) {
-	const toggleChecked = (task: Task) => {
-		Meteor.call('tasks.toggleChecked', task) // TODO call with promise
-	}
-
-	const deleteTask = (taskId: Task['_id']) => {
-		Meteor.call('tasks.delete', taskId) // TODO call with promise
-	}
-
-	return (
-		<li>
-			<input
-				type="checkbox"
-				checked={!!task.isChecked}
-				onClick={() => toggleChecked(task)}
-				readOnly
-			/>
-			<span>{task.text}</span>
-			<button onClick={() => deleteTask(task._id)}>&times;</button>
-		</li>
 	)
 }

@@ -26,12 +26,16 @@
     "baseUrl": ".",
     "paths": {
       /* Support absolute /imports/* with a leading '/' */
-      "/*": ["*"]
+      "/*": ["*"],
+      // configuration required for zodern:types (https://atmospherejs.com/zodern/types)
+      "meteor/*": ["node_modules/@types/meteor/*", ".meteor/local/types/packages.d.ts"]
     },
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "esModuleInterop": true,
+    // meteor TS default, (and also required for zodern:types: https://atmospherejs.com/zodern/types)
     "preserveSymlinks": true
   },
-  "exclude": ["./.meteor/**", "./packages/**", "node_modules"]
+  // zodern:types requirey .meteor/local/types to not be excluded (https://atmospherejs.com/zodern/types)
+  "exclude": ["./.meteor/**", "!./.meteor/local/types/**", "./packages/**", "node_modules"]
 }

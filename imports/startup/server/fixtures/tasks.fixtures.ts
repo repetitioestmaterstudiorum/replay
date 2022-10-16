@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor'
-import { TasksCollection } from '/imports/api/tasks/tasks.collection'
-import { insertTask } from '/imports/api/tasks/tasks.methods'
+import { TasksCollection } from '/imports/api/collections/tasks/tasks.collection'
+import { insertTask } from '/imports/api/collections/tasks/tasks.mutations'
 import { C } from '/imports/startup/server/server-constants'
 
 // ---
@@ -20,6 +20,6 @@ Meteor.startup(() => {
 			'Fifth Task',
 			'Sixth Task',
 			'Seventh Task',
-		].forEach(t => insertTask(t, userId))
+		].forEach(t => insertTask({ userId, text: t }))
 	}
 })

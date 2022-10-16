@@ -1,6 +1,6 @@
 import { useTracker } from 'meteor/react-meteor-data'
 import React from 'react'
-import { TasksCollection } from '/imports/api/tasks/tasks.collection'
+import { TasksCollection } from '/imports/api/collections/tasks/tasks.collection'
 import { TaskList } from '/imports/ui/components/TaskList'
 
 // ---

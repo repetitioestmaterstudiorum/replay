@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { insertTaskMM } from '/imports/api/collections/tasks/methods/insertTaskMM'
+import { insertTaskMM } from '/imports/api/collections/tasks/methods/tasks.insertTaskMM'
 
 // ---
 

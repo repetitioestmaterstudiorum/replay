@@ -1,13 +1,13 @@
 import React from 'react'
-import { deleteTaskMM } from '/imports/api/collections/tasks/methods/deleteTaskMM'
-import { toggleDoneTaskMM } from '/imports/api/collections/tasks/methods/toggleDoneTaskMM'
+import { deleteTaskMM } from '/imports/api/collections/tasks/methods/tasks.deleteTaskMM'
+import { toggleTaskMM } from '/imports/api/collections/tasks/methods/tasks.toggleTaskMM'
 import type { Task } from '/imports/api/collections/tasks/tasks.types'
 
 // ---
 
 export function Task({ task }: { task: Task }) {
 	const toggleChecked = async (taskId: string, isChecked: boolean) => {
-		toggleDoneTaskMM({ taskId, isChecked })
+		toggleTaskMM({ taskId, isChecked })
 	}
 
 	const deleteTask = (taskId: string) => {

@@ -1,4 +1,4 @@
-import { insert } from '/imports/api/collections/generic-collection-helpers'
+import { insert } from '/imports/api/db/generic-collection-methods'
 import { LogsCollection } from '/imports/api/collections/logs/logs.collection'
 import type { Log } from '/imports/api/collections/logs/logs.types'
 

@@ -11,8 +11,6 @@ export const insertTaskMM = createMethod({
 	async run({ text }) {
 		const userId = checkLoggedIn()
 
-		if (Meteor.isClient) console.log('client insert')
-
 		return await insertTask({ userId, text })
 	},
 })

@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor'
 import { z } from 'zod'
-import { findOne } from '/imports/api/collections/generic-collection-helpers'
+import { findOne } from '/imports/api/db/generic-collection-methods'
 import { TasksCollection } from '/imports/api/collections/tasks/tasks.collection'
 import type { Task } from '/imports/api/collections/tasks/tasks.types'
 

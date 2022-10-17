@@ -1,4 +1,4 @@
-import { insert, update } from '/imports/api/collections/generic-collection-helpers'
+import { insert, update } from '/imports/api/db/generic-collection-methods'
 import { TasksCollection } from '/imports/api/collections/tasks/tasks.collection'
 import type { Task } from '/imports/api/collections/tasks/tasks.types'
 

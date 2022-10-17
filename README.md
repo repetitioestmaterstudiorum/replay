@@ -48,3 +48,4 @@ A simpler solution that is very robust and requires little to no maintenance is 
 -   the meteor methods need to be in a `/methods` directory to ensure methods are rewritten in the client bundle
 -   `stub: true` will enable the method on the client as well
 -   `stub() {}` can replace the server side method on the client with something simpler
+-   sample publications with varying complexity: https://github.com/zodern/meteor-relay/blob/master/tests/publications/index.js

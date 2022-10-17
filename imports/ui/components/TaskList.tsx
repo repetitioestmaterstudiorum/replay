@@ -4,6 +4,7 @@ import { TasksCollection } from '/imports/api/collections/tasks/tasks.collection
 import type { Task as TaskType } from '/imports/api/collections/tasks/tasks.types'
 import { AddTask } from '/imports/ui/components/AddTask'
 import { Task } from '/imports/ui/components/Task'
+import { tasksPublication } from '../../startup/publications/tasks.publications'
 
 // ---
 
@@ -18,7 +19,8 @@ export function TaskList() {
 			return noDataAvailable
 		}
 
-		const tasksSubscription = Meteor.subscribe('tasks')
+		// const tasksSubscription = Meteor.subscribe('tasks')
+		const tasksSubscription = tasksPublication()
 
 		if (!tasksSubscription.ready()) {
 			return { ...noDataAvailable, isLoading: true }

@@ -22,7 +22,16 @@ export async function log({ text, data, severity = 'info' }: LogParams) {
 	})
 
 	if (Meteor.isServer) {
-		logToDb({ text, data, severity, timestamp })
+		try {
+			logToDb({ text, data, severity, timestamp })
+		} catch (e) {
+			logToStd({
+				text: `Unable to log "${text}" (severity ${severity}) to the db. Error:`,
+				severity: 'error',
+				timestamp,
+				data: e,
+			})
+		}
 	}
 }
 

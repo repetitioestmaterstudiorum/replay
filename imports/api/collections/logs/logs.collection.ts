@@ -9,7 +9,7 @@ export const LogsCollection = new Mongo.Collection<Log>('logs')
 
 ensureIndexes(LogsCollection, 'logs')
 
-export const logsSchema = z.object({
+export const logSchema = z.object({
 	text: z.string(),
 	data: z.any(),
 	severity: z.enum(['info', 'error']),

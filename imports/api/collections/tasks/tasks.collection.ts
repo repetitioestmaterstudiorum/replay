@@ -9,7 +9,7 @@ export const TasksCollection = new Mongo.Collection<Task>('tasks')
 
 ensureIndexes(TasksCollection, 'tasks')
 
-export const tasksSchema = z.object({
+export const taskSchema = z.object({
 	userId: z.string(),
 	text: z.string(),
 	isChecked: z.boolean(),

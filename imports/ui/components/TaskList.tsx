@@ -1,44 +1,59 @@
 import React, { useState } from 'react'
-import { useTracker } from 'meteor/react-meteor-data'
+import { useFind, useTracker } from 'meteor/react-meteor-data'
 import { TasksCollection } from '/imports/api/collections/tasks/tasks.collection'
-import type { Task as TaskType } from '/imports/api/collections/tasks/tasks.types'
 import { AddTask } from '/imports/ui/components/AddTask'
 import { Task } from '/imports/ui/components/Task'
-import { tasksPublication } from '../../startup/publications/tasks.publications'
+import { usersPublication } from '/imports/startup/publications/users.publications'
+import { tasksPublication } from '/imports/startup/publications/tasks.publications'
+import { User } from '/imports/api/collections/users/users.types'
 
 // ---
 
 export function TaskList() {
-	const [hideCompleted, setHideCompleted] = useState(true)
+	const [hideDone, setHideDone] = useState(true)
 
-	type TrackerReturns = { tasks: TaskType[] | []; isLoading?: boolean }
+	const { userId, replayDate, isUsersLoading } = useTracker(() => {
+		const usersSubscription = usersPublication()
+		const user: User | null = Meteor.user({ fields: { 'uiState.replayDate': 1 } })
 
-	const { tasks, isLoading }: TrackerReturns = useTracker(() => {
-		const noDataAvailable = { tasks: [] }
-		if (!Meteor.user()) {
-			return noDataAvailable
+		return {
+			isUsersLoading: !usersSubscription.ready(),
+			userId: user?._id,
+			replayDate: user?.uiState?.replayDate,
 		}
+	}, [])
 
-		// const tasksSubscription = Meteor.subscribe('tasks')
-		const tasksSubscription = tasksPublication()
+	console.log('userId, replayDate, isUsersLoading', userId, replayDate, isUsersLoading)
 
-		if (!tasksSubscription.ready()) {
-			return { ...noDataAvailable, isLoading: true }
+	const isTasksLoading = useTracker(() => {
+		if (!isUsersLoading) {
+			const tasksSubscription = tasksPublication({ replayDate: replayDate })
+
+			return !tasksSubscription.ready()
 		}
+	}, [isUsersLoading, replayDate])
 
-		const selector = hideCompleted ? { isChecked: { $ne: true } } : {}
-		const tasks = TasksCollection.find(selector, { sort: { createdAt: -1 } }).fetch()
-		return { tasks }
-	})
+	console.log('isTasksLoading', isTasksLoading)
 
-	return isLoading ? (
+	const tasks =
+		useFind(() => {
+			if (userId) {
+				const selector = hideDone ? { isChecked: { $ne: true }, userId } : { userId }
+
+				return TasksCollection.find(selector, { sort: { createdAt: -1 } })
+			}
+		}, [hideDone, isTasksLoading]) || []
+
+	console.log('tasks', tasks)
+
+	return isTasksLoading ? (
 		<h2>Loading :)</h2>
 	) : (
 		<div>
 			<AddTask />
 			<div className="filter">
-				<button onClick={() => setHideCompleted(!hideCompleted)}>
-					{hideCompleted ? 'Show All' : 'Hide Completed'}
+				<button onClick={() => setHideDone(!hideDone)}>
+					{hideDone ? 'Show All' : 'Hide Done'}
 				</button>
 			</div>
 			<ul>

@@ -1,4 +1,5 @@
 import { Mongo } from 'meteor/mongo'
+import type { CollectionFindParams } from '/imports/api/db/db.types'
 
 // ---
 
@@ -17,18 +18,22 @@ export async function update<DocType>(
 	return await collection.update(selector, modifier)
 }
 
-export async function find<DocType>(
-	collection: Mongo.Collection<DocType>,
-	selector: Mongo.Selector<DocType>,
-	options?: Mongo.Options<DocType>
-) {
+export async function find<DocType>({
+	collection,
+	selector,
+	options,
+	replayDate,
+}: CollectionFindParams<DocType>) {
+	console.log('replayDate find', replayDate)
 	return (await collection.find(selector, options)) as Mongo.Cursor<DocType, DocType>
 }
 
-export async function findOne<DocType>(
-	collection: Mongo.Collection<DocType>,
-	selector: Mongo.Selector<DocType>,
-	options?: Mongo.Options<DocType>
-) {
+export async function findOne<DocType>({
+	collection,
+	selector,
+	options,
+	replayDate,
+}: CollectionFindParams<DocType>) {
+	console.log('replayDate findOne', replayDate)
 	return (await collection.findOne(selector, options)) as DocType | undefined
 }

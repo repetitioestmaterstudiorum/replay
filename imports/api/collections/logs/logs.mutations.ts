@@ -4,6 +4,6 @@ import type { Log } from '/imports/api/collections/logs/logs.types'
 
 // ---
 
-export async function insertLog(log: Log) {
+export async function insertLog(log: Omit<Log, '_id'>) {
 	return await insert<Log>(LogsCollection, log)
 }

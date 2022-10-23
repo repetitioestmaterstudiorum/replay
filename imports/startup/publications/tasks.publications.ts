@@ -1,14 +1,20 @@
 import { createPublication } from 'meteor/zodern:relay'
 import { z } from 'zod'
-import { TasksCollection } from '/imports/api/collections/tasks/tasks.collection'
+import { findTasks } from '/imports/api/collections/tasks/tasks.getters'
 
 // ---
 
+const replayDateSchema = z.object({ replayDate: z.date().optional() })
+
 export const tasksPublication = createPublication({
-	schema: z.any(),
-	run() {
+	schema: replayDateSchema,
+	async run({ replayDate }: z.infer<typeof replayDateSchema>) {
 		if (this.userId) {
-			return TasksCollection.find({ userId: this.userId, isDeleted: { $ne: true } })
+			const selector = {
+				userId: this.userId,
+				isDeleted: { $ne: true },
+			}
+			return await findTasks({ selector, replayDate })
 		} else {
 			this.ready()
 		}

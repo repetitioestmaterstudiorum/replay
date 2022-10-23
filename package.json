@@ -4,6 +4,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "export $(grep -v '^#' .env | xargs) && meteor --exclude-archs web.browser.legacy",
+    "dev:warnings": "export $(grep -v '^#' .env | xargs) && NODE_OPTIONS=--trace-warnings meteor --exclude-archs web.browser.legacy",
     "test": "BROWSERSLIST_IGNORE_OLD_DATA=1 meteor test --driver-package meteortesting:mocha",
     "test:app": "BROWSERSLIST_IGNORE_OLD_DATA=1 TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
     "test:full": "npm run lint && npm run tsc && npm test",
@@ -22,6 +23,7 @@
     "meteor-node-stubs": "^1.2.1",
     "mongodb-memory-server": "^8.8.0",
     "react": "^17.0.2",
+    "react-date-picker": "^9.0.0",
     "react-dom": "^17.0.2",
     "react-router-dom": "^6.4.2",
     "zod": "^3.19.1"

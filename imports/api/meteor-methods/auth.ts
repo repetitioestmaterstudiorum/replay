@@ -16,10 +16,10 @@ export async function checkUsersTask(taskId: string) {
 	const userId = checkLoggedIn()
 	z.string().parse(taskId)
 
-	const isUsersTask = await findOne<Task>(
-		TasksCollection,
-		{ _id: taskId, userId },
-		{ fields: { _id: 1 } }
-	)
+	const isUsersTask = await findOne<Task>({
+		collection: TasksCollection,
+		selector: { _id: taskId, userId },
+		options: { fields: { _id: 1 } },
+	})
 	if (!isUsersTask) throw new Error('Access denied.')
 }

@@ -4,3 +4,13 @@ export type DefaultDbFields = {
 	createdAt?: Date
 	updatedAt?: Date
 }
+
+export type FindParams<DocType> = {
+	selector: Mongo.Selector<DocType>
+	options?: Mongo.Options<DocType>
+	replayDate?: Date
+}
+
+export type CollectionFindParams<DocType> = {
+	collection: Mongo.Collection<DocType>
+} & FindParams<DocType>

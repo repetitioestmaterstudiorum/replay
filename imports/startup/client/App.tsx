@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import React from 'react'
 import { Router } from '/imports/startup/client/Router'
+import { DatePick } from '/imports/ui/components/DatePick'
 
 // ---
 
@@ -9,6 +10,7 @@ export function App() {
 
 	return (
 		<>
+			<DatePick />
 			<Router />
 			<div
 				className="user"

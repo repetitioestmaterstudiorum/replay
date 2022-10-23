@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor'
 import { createPublication } from 'meteor/zodern:relay'
 import { z } from 'zod'
 

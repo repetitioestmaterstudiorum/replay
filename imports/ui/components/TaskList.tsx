@@ -23,8 +23,6 @@ export function TaskList() {
 		}
 	}, [])
 
-	console.log('userId, replayDate, isUsersLoading', userId, replayDate, isUsersLoading)
-
 	const isTasksLoading = useTracker(() => {
 		if (!isUsersLoading) {
 			const tasksSubscription = tasksPublication({ replayDate: replayDate })
@@ -32,8 +30,6 @@ export function TaskList() {
 			return !tasksSubscription.ready()
 		}
 	}, [isUsersLoading, replayDate])
-
-	console.log('isTasksLoading', isTasksLoading)
 
 	const tasks =
 		useFind(() => {
@@ -43,8 +39,6 @@ export function TaskList() {
 				return TasksCollection.find(selector, { sort: { createdAt: -1 } })
 			}
 		}, [hideDone, isTasksLoading]) || []
-
-	console.log('tasks', tasks)
 
 	return isTasksLoading ? (
 		<h2>Loading :)</h2>

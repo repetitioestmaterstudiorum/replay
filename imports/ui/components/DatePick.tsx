@@ -10,7 +10,7 @@ import type { User } from '/imports/api/collections/users/users.types'
 export function DatePick() {
 	const user: User | null = useTracker(() => Meteor.user())
 
-	return (
+	return user ? (
 		<div>
 			<DatePicker
 				onChange={(date: Date) => {
@@ -23,7 +23,7 @@ export function DatePick() {
 				value={user?.uiState?.replayDate || new Date()}
 			/>
 		</div>
-	)
+	) : null
 }
 
 function isToday(date: Date) {

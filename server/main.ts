@@ -3,7 +3,7 @@ import { C } from '/imports/startup/server/server-constants'
 
 // ---
 
-// import all fixtures, publications, and methods
+// import all fixtures, publications, and meteor methods
 import '/imports/startup/server/fixtures/all-fixtures'
 import '/imports/startup/publications/all-publications'
 import '/imports/api/meteor-methods/all-meteor-methods'

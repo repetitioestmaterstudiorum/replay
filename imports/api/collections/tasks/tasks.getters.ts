@@ -5,6 +5,6 @@ import { find } from '/imports/api/db/generic-collection-methods'
 
 // ---
 
-export async function findTasks({ selector, options, replayDate }: FindParams<Task>) {
+export async function findTasks({ selector, options, replayDate }: FindParams<Task> = {}) {
 	return await find<Task>({ collection: TasksCollection, selector, options, replayDate })
 }

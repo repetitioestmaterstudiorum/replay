@@ -7,7 +7,7 @@ import { checkLoggedIn } from '/imports/api/meteor-methods/auth'
 
 export const unsetReplayDate = createMethod({
 	stub: true,
-	schema: z.any(),
+	schema: z.undefined(),
 	async run() {
 		const userId = checkLoggedIn()
 

@@ -15,7 +15,7 @@ export function DatePick() {
 			<DatePicker
 				onChange={(date: Date) => {
 					if (date === null || isToday(date)) {
-						unsetReplayDate({})
+						unsetReplayDate()
 					} else {
 						setReplayDate({ replayDate: date })
 					}

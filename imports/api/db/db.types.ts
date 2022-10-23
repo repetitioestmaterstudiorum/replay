@@ -6,7 +6,7 @@ export type DefaultDbFields = {
 }
 
 export type FindParams<DocType> = {
-	selector: Mongo.Selector<DocType>
+	selector?: Mongo.Selector<DocType>
 	options?: Mongo.Options<DocType>
 	replayDate?: Date
 }

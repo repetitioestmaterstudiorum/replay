@@ -1,12 +1,12 @@
 import { Meteor } from 'meteor/meteor'
-import { TasksCollection } from '/imports/api/collections/tasks/tasks.collection'
+import { findTasks } from '/imports/api/collections/tasks/tasks.getters'
 import { insertTask } from '/imports/api/collections/tasks/tasks.mutations'
 import { C } from '/imports/startup/server/server-constants'
 
 // ---
 
-Meteor.startup(() => {
-	if (TasksCollection.find().count() === 0) {
+Meteor.startup(async () => {
+	if ((await findTasks()).count() === 0) {
 		const userId = Meteor.users.findOne({ username: C.defaultAdmin.username })?._id
 		if (!userId) {
 			return console.error('no C.defaultAdmin.username id found ')

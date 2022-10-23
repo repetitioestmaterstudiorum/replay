@@ -5,7 +5,7 @@ import { z } from 'zod'
 // ---
 
 export const usersPublication = createPublication({
-	schema: z.any(),
+	schema: z.undefined(),
 	async run() {
 		if (this.userId) {
 			return await Meteor.users.find(

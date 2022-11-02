@@ -20,8 +20,8 @@ export async function update<DocType>(
 
 export async function find<DocType>({
 	collection,
-	selector,
-	options,
+	selector = {},
+	options = {},
 	replayDate,
 }: CollectionFindParams<DocType>) {
 	console.log('replayDate find', replayDate)
@@ -30,8 +30,8 @@ export async function find<DocType>({
 
 export async function findOne<DocType>({
 	collection,
-	selector,
-	options,
+	selector = {},
+	options = {},
 	replayDate,
 }: CollectionFindParams<DocType>) {
 	console.log('replayDate findOne', replayDate)

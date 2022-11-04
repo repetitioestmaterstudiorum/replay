@@ -1,4 +1,4 @@
-import _, { uniqueId } from 'lodash'
+import _ from 'lodash'
 import { Mongo } from 'meteor/mongo'
 import type { CollectionFindParams, DocumentsCursor } from '/imports/api/db/db.types'
 
@@ -72,7 +72,7 @@ export async function find<DocType>({
 		// create temporary collection
 		// TODO index to delete inserted documents after a certain time or so (this entails resetting replayDate after that time)
 		const { C } = await import('/imports/startup/server/server-constants')
-		const memoryCollection = C.memoryDb.db?.collection(uniqueId('memory-coll-'))
+		const memoryCollection = C.memoryDb.db?.collection(collection.rawCollection.name)
 
 		// apply history to memoryDb document(s)
 		const insertedDocumentIds = new Set()
@@ -115,7 +115,6 @@ export async function find<DocType>({
 
 		return memoryDocuments
 	} else {
-		console.log('client find')
 		return await collection.find(selector, options)
 	}
 }

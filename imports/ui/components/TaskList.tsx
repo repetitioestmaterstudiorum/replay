@@ -47,7 +47,7 @@ export function TaskList() {
 			<AddTask />
 			<div className="filter">
 				<button onClick={() => setHideDone(!hideDone)}>
-					{hideDone ? 'Show All' : 'Hide Done'}
+					{hideDone ? 'Show Done' : 'Hide Done'}
 				</button>
 			</div>
 			<ul>

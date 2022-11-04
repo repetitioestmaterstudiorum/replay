@@ -4,13 +4,13 @@
   "license": "MIT",
   "scripts": {
     "dev": "export $(grep -v '^#' .env | xargs) && meteor --exclude-archs web.browser.legacy",
-    "dev:warnings": "export $(grep -v '^#' .env | xargs) && NODE_OPTIONS=--trace-warnings meteor --exclude-archs web.browser.legacy",
+    "dev:trace": "export $(grep -v '^#' .env | xargs) && NODE_OPTIONS=--trace-warnings meteor --exclude-archs web.browser.legacy",
     "test": "BROWSERSLIST_IGNORE_OLD_DATA=1 meteor test --driver-package meteortesting:mocha",
     "test:app": "BROWSERSLIST_IGNORE_OLD_DATA=1 TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
     "test:full": "npm run lint && npm run tsc && npm test",
     "lint": "eslint imports/**/*.ts",
     "tsc": "tsc -p tsconfig.json",
-    "reset": "meteor reset && rimraf package-lock.json && rimraf node_modules/  && meteor npm i"
+    "reset": "meteor reset && rimraf package-lock.json && rimraf node_modules/ && meteor npm i"
   },
   "engines": {
     "node": "^16"

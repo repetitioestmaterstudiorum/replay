@@ -4,4 +4,6 @@ import { taskSchema } from '/imports/api/collections/tasks/tasks.collection'
 
 // ---
 
-export type Task = z.infer<typeof taskSchema> & DefaultDbFields
+type TaskDocType = z.infer<typeof taskSchema>
+
+export type Task = TaskDocType & DefaultDbFields<TaskDocType>

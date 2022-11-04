@@ -1,13 +1,16 @@
+import { MemoryDb } from '/imports/api/db/memory-db'
 import { C as isoC } from '/imports/startup/iso-constants'
 
 // ---
 
-export const constants = {
+const constants = {
 	...isoC,
 	defaultAdmin: {
 		username: process.env.DEFAULT_ADMIN_USERNAME || 'meteorish',
 		password: process.env.DEFAULT_ADMIN_PASSWORD || '123456789',
 	},
+	memoryDb: new MemoryDb(),
+	// indexes for the Meteor Mongo db (not the memoryDb)
 	collections: {
 		tasks: {
 			idxs: [

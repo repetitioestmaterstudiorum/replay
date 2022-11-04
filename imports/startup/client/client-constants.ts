@@ -2,7 +2,7 @@ import { C as isoC } from '/imports/startup/iso-constants'
 
 // ---
 
-export const constants = {
+const constants = {
 	...isoC,
 }
 

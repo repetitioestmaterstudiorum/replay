@@ -4,4 +4,6 @@ import { logSchema } from '/imports/api/collections/logs/logs.collection'
 
 // ---
 
-export type Log = z.infer<typeof logSchema> & DefaultDbFields
+type LogDocType = z.infer<typeof logSchema>
+
+export type Log = LogDocType & DefaultDbFields<LogDocType>

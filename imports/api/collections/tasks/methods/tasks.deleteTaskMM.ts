@@ -10,7 +10,7 @@ export const deleteTaskMM = createMethod({
 	schema: z.object({
 		taskId: z.string(),
 	}),
-	async run({ taskId }) {
+	async run({ taskId }: { taskId: string }) {
 		checkUsersTask(taskId)
 
 		return await updateTask(taskId, { $set: { isDeleted: true } })

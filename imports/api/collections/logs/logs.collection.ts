@@ -1,13 +1,14 @@
-import { Mongo } from 'meteor/mongo'
-import type { Log } from '/imports/api/collections/logs/logs.types'
-import { z } from 'zod'
+import { createCollection } from '/imports/api/db/db.utils'
 import { ensureIndexes } from '/imports/api/db/ensure-indexes'
+import { z } from 'zod'
 
 // ---
 
-export const LogsCollection = new Mongo.Collection<Log>('logs')
+export const LogsCollection = createCollection<Log>('logs')
 
 ensureIndexes(LogsCollection, 'logs')
+
+export type Log = z.infer<typeof logSchema>
 
 export const logSchema = z.object({
 	text: z.string(),

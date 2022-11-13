@@ -1,29 +1,35 @@
 import type { Mongo } from 'meteor/mongo'
+import type { Collection, ReplayCollection } from '/imports/api/db/db.utils'
 
 // ---
 
-export type DefaultDbFields<DocType> = {
-	_id: string
-	// not really optional props (mandatory in all db docs) but this simplifies insert methods because dates should be created automatically elsewhere
-	createdAt?: Date
-	updatedAt?: Date
-	initialInsert?: DocType // // first element: initial insert of doc
-	modifierHistory?: Modifier<DocType>[] // rest of the elements: mongodb modifiers
-}
-
-type Modifier<DocType> = {
-	timestamp: Date
-	update: Mongo.Modifier<DocType>
-}
-
 export type FindParams<DocType> = {
-	selector?: Mongo.Selector<DocType>
-	options?: Mongo.Options<DocType>
+	selector?: Mongo.Selector<DocWithDbFields<DocType>>
+	options?: Mongo.Options<DocWithDbFields<DocType>>
 	replayDate?: Date
 }
 
-export type CollectionFindParams<DocType> = {
-	collection: Mongo.Collection<DocType>
-} & FindParams<DocType>
+export type CollectionParams<DocType> = {
+	collection: Collection<DocType>
+	replayCollection: ReplayCollection<DocType>
+}
 
-export type DocumentsCursor<DocType> = Mongo.Cursor<DocType & DefaultDbFields<DocType>>
+export type DocWithDbFields<DocType> = DocType & DefaultDbFields<DocType>
+
+type DefaultDbFields<DocType> = MetaDbFields & ReplayDbFields<DocType>
+
+type MetaDbFields = {
+	_id: string
+	createdAt: Date
+	updatedAt: Date
+}
+
+type ReplayDbFields<DocType> = {
+	initialInsert?: DocType & MetaDbFields
+	updateHistory?: DbDocUpdate<DocType & MetaDbFields>[]
+}
+
+type DbDocUpdate<DocType> = {
+	timestamp: Date
+	update: Mongo.Modifier<DocType>
+}

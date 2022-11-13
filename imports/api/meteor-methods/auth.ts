@@ -1,8 +1,6 @@
 import { Meteor } from 'meteor/meteor'
 import { z } from 'zod'
-import { findOne } from '/imports/api/db/generic-collection-methods'
-import { TasksCollection } from '/imports/api/collections/tasks/tasks.collection'
-import type { Task } from '/imports/api/collections/tasks/tasks.types'
+import { findTasks } from '/imports/api/collections/tasks/tasks.getters'
 
 // ---
 
@@ -16,10 +14,13 @@ export async function checkUsersTask(taskId: string) {
 	const userId = checkLoggedIn()
 	z.string().parse(taskId)
 
-	const isUsersTask = await findOne<Task>({
-		collection: TasksCollection,
-		selector: { _id: taskId, userId },
-		options: { fields: { _id: 1 } },
-	})
-	if (!isUsersTask) throw new Error('Access denied.')
+	const isUsersTask =
+		(
+			await findTasks({
+				selector: { _id: taskId, userId },
+				options: { fields: { _id: 1 } },
+			})
+		).count() === 1
+
+	if (isUsersTask) throw new Error('Access denied.')
 }

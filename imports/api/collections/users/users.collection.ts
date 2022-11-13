@@ -9,3 +9,5 @@ export const userSchema = z.object({
 		})
 		.optional(),
 })
+
+export type User = Meteor.User & z.infer<typeof userSchema>

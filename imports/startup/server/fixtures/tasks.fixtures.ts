@@ -6,7 +6,7 @@ import { C } from '/imports/startup/server/server-constants'
 // ---
 
 Meteor.startup(async () => {
-	if ((await findTasks()).count() === 0) {
+	if ((await findTasks())?.count() === 0) {
 		const userId = Meteor.users.findOne({ username: C.defaultAdmin.username })?._id
 		if (!userId) {
 			return console.error('no C.defaultAdmin.username id found ')

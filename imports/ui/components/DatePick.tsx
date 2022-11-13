@@ -3,7 +3,7 @@ import React from 'react'
 import DatePicker from 'react-date-picker'
 import { setReplayDate } from '/imports/api/collections/users/methods/users.setReplayDate'
 import { unsetReplayDate } from '/imports/api/collections/users/methods/users.unsetReplayDate'
-import type { User } from '/imports/api/collections/users/users.types'
+import type { User } from '/imports/api/collections/users/users.collection'
 
 // ---
 

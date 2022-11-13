@@ -10,7 +10,7 @@ import '/imports/api/meteor-methods/all-meteor-methods'
 
 Meteor.startup(async () => {
 	// initiate the memory db for replayability
-	await C.memoryDb.init()
+	await C.memoryDb?.init()
 
 	// ensure there's an admin user
 	if (!Accounts.findUserByUsername(C.defaultAdmin.username)) {

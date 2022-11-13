@@ -1,11 +1,12 @@
 import React from 'react'
 import { deleteTaskMM } from '/imports/api/collections/tasks/methods/tasks.deleteTaskMM'
 import { toggleTaskMM } from '/imports/api/collections/tasks/methods/tasks.toggleTaskMM'
-import type { Task } from '/imports/api/collections/tasks/tasks.types'
+import type { Task } from '/imports/api/collections/tasks/tasks.collection'
+import { DocWithDbFields } from '/imports/api/db/db.types'
 
 // ---
 
-export function Task({ task }: { task: Task }) {
+export function Task({ task }: { task: DocWithDbFields<Task> }) {
 	const toggleChecked = async (taskId: string, isChecked: boolean) => {
 		toggleTaskMM({ taskId, isChecked })
 	}

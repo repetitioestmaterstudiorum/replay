@@ -9,7 +9,7 @@ export async function ensureIndexes<T>(collection: Mongo.Collection<T>, collecti
 	if (Meteor.isServer) {
 		type Index = CreateIndexesOptions & { key: Record<string, number> }
 		const { C } = await import('/imports/startup/server/server-constants')
-		const createIndexes: Index[] = _.get(C, `collections.${collectionName}.idxs`)
+		const createIndexes: Index[] = _.get(C, `collections.${collectionName}.idxs`) || []
 
 		try {
 			const existingIndexes = await collection.rawCollection().indexes()

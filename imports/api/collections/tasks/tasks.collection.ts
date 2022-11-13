@@ -1,13 +1,18 @@
-import { Mongo } from 'meteor/mongo'
-import type { Task } from '/imports/api/collections/tasks/tasks.types'
-import { z } from 'zod'
 import { ensureIndexes } from '/imports/api/db/ensure-indexes'
+import { createCollection, createReplayCollection } from '/imports/api/db/db.utils'
+import { z } from 'zod'
 
 // ---
 
-export const TasksCollection = new Mongo.Collection<Task>('tasks')
+export const TasksCollection = createCollection<Task>('tasks')
 
 ensureIndexes(TasksCollection, 'tasks')
+
+export const TasksReplayCollection = Meteor.isClient
+	? createCollection<Task>('tasksReplay')
+	: createReplayCollection<Task>('tasksReplay')
+
+export type Task = z.infer<typeof taskSchema>
 
 export const taskSchema = z.object({
 	userId: z.string(),

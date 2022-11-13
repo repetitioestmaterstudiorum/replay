@@ -1,59 +1,69 @@
 import _ from 'lodash'
 import { Mongo } from 'meteor/mongo'
-import type { CollectionFindParams, DocumentsCursor } from '/imports/api/db/db.types'
+import type { Collection } from '/imports/api/db/db.utils'
+import type { CollectionParams, DocWithDbFields, FindParams } from '/imports/api/db/db.types'
+import { log } from '/imports/api/utils/log'
 
 // ---
 
 export async function insert<DocType>(
-	collection: Mongo.Collection<DocType>,
-	// insert in meteor = insertOne in mongo
-	document: UnionOmit<DocType, '_id'>,
-	replay: boolean | undefined = true
+	collection: Collection<DocType>,
+	document: DocType,
+	replayable: boolean | undefined = true
 ) {
+	holyFieldsGuard(document)
+
 	const timestamp = new Date()
 
-	const baseDocument = _.assign(document, {
-		_id: _.get(document, '_id') || new Mongo.ObjectID().toHexString(),
+	const documentWithMetaFields = _.assign(document, {
+		_id: new Mongo.ObjectID().toHexString(),
 		createdAt: timestamp,
 		updatedAt: timestamp,
 	})
 
 	// prettier-ignore
-	const enrichedDocument = replay ? baseDocument
-	: _.assign(
-		baseDocument,
-		{
-			initialInsert: _.cloneDeep(baseDocument),
-			modifierHistory: [],
-		}
-	)
+	const finalDocument = replayable ? _.assign(documentWithMetaFields, {
+				initialInsert: _.cloneDeep(documentWithMetaFields),
+				updateHistory: [],
+		  })
+		: documentWithMetaFields
 
-	return await collection.insert(enrichedDocument)
+	// @ts-ignore
+	return await collection.insert(finalDocument)
 }
 
 export async function update<DocType>(
-	collection: Mongo.Collection<DocType>,
-	selector: Mongo.Selector<DocType>,
-	modifier: Mongo.Modifier<DocType>,
-	replay: boolean | undefined = true
+	collection: Collection<DocType>,
+	selector: Mongo.Selector<DocWithDbFields<DocType>>,
+	update: Mongo.Modifier<DocType>,
+	replayable: boolean | undefined = true
 ) {
-	// perform actual update
-	const modifierWithMetadata = _.assign(modifier, {
-		$set: _.assign(_.get(modifier, '$set'), { updatedAt: new Date() }),
-	})
-	const updateResult = collection.update(selector, modifierWithMetadata)
+	holyFieldsGuard(update)
 
-	if (Meteor.isServer && replay) {
-		// add update to modifierHistory
-		const modifierWithMetadataAndModifierHistory = _.assign(modifierWithMetadata, {
+	const timestamp = new Date()
+
+	// perform actual update
+	const updateWithMetadata = {
+		..._.cloneDeep(update),
+		$set: {
+			..._.get(update, '$set'),
+			updatedAt: timestamp,
+		},
+	}
+	const updateResult = collection.update(selector, updateWithMetadata)
+
+	if (Meteor.isServer && replayable) {
+		// add update to updateHistory
+		const replayUpdate = {
 			$push: {
-				modifierHistory: {
-					timestamp: new Date(),
-					update: modifierWithMetadata,
+				..._.get(updateWithMetadata, '$push'),
+				updateHistory: {
+					timestamp,
+					update: updateWithMetadata,
 				},
 			},
-		})
-		await collection.update(selector, modifierWithMetadataAndModifierHistory)
+		}
+		await collection.update(selector, replayUpdate)
 	}
 
 	return await updateResult
@@ -61,70 +71,71 @@ export async function update<DocType>(
 
 export async function find<DocType>({
 	collection,
+	replayCollection,
 	selector = {},
 	options = {},
 	replayDate,
-}: CollectionFindParams<DocType>) {
+}: FindParams<DocType> & CollectionParams<DocType>) {
 	if (replayDate && Meteor.isServer) {
 		console.log('\nreplayDate server find:', replayDate)
-		const documents: DocumentsCursor<DocType> = await collection.find(selector, options)
 
-		// create temporary collection
-		// TODO index to delete inserted documents after a certain time or so (this entails resetting replayDate after that time)
 		const { C } = await import('/imports/startup/server/server-constants')
-		const memoryCollection = C.memoryDb.db?.collection(collection.rawCollection.name)
+		if (!C.memoryDb?.ready) return console.error(new Error('C.memoryDb.ready is false'))
+
+		const documents = await collection.find(selector, options)
+
+		const memoryCollection = await replayCollection
 
 		// apply history to memoryDb document(s)
-		const insertedDocumentIds = new Set()
+		const insertedDocumentIds = []
 		for (const doc of documents.fetch()) {
-			console.log('--- doc._id', doc._id, doc.createdAt)
+			if (!doc?.createdAt || doc?.createdAt > replayDate) continue
 
-			if (!doc?.createdAt || doc?.createdAt > replayDate) return undefined
-
-			console.log('* survived:', doc._id)
+			// delete existing document in memory if it exists
+			if (await memoryCollection?.findOne(doc._id)) {
+				// continue
+				await memoryCollection?.remove(doc._id)
+			}
 
 			// insert document
-			// TODO ensure already inserted documents don't cause an error
-			const insertResult = await memoryCollection?.insertOne(doc as any)
-			if (insertResult?.insertedId) insertedDocumentIds.add(insertResult?.insertedId)
+			const insertedDocumentId = await memoryCollection?.insert(doc)
+			insertedDocumentIds.push(insertedDocumentId)
 
 			// apply all modifications
 			const relevantSortedModifyHistory =
-				doc.modifierHistory
+				doc.updateHistory
 					?.filter(mod => mod.timestamp <= replayDate)
 					?.sort(
 						(mod_a, mod_b) => +new Date(mod_a.timestamp) - +new Date(mod_b.timestamp)
 					) || []
 
 			for (const mod of relevantSortedModifyHistory) {
-				console.log('updating doc', doc._id)
-				await memoryCollection?.updateOne({ _id: doc._id }, mod.update as any)
+				await memoryCollection?.update({ _id: doc._id }, mod.update)
 			}
 		}
 
-		/*
-		Exception from sub tasksPublicationM98dc1 id bSJ4ETQD6dDa7rGt9 Error: Publish function can only return a Cursor or an array of Cursors
-		at Subscription._publishHandlerResult (packages/ddp-server/livedata_server.js:1206:18)
-		at Subscription._runHandler (packages/ddp-server/livedata_server.js:1136:12)
-		at Session._startSubscription (packages/ddp-server/livedata_server.js:917:9)
-		at Session.sub (packages/ddp-server/livedata_server.js:673:12)
-		at packages/ddp-server/livedata_server.js:603:43
-		*/
-		// TODO FIXME next: how to use Meteor's Mongo stuff to do all of this?
-		const memoryDocuments = await memoryCollection?.find({ _id: { $in: insertedDocumentIds } })
-
-		return memoryDocuments
+		const memoryFound = await memoryCollection.find({ _id: { $in: insertedDocumentIds } })
+		return memoryFound
 	} else {
-		return await collection.find(selector, options)
+		const found = await collection.find(selector, options)
+		return found
 	}
 }
 
-export async function findOne<DocType>({
-	collection,
-	selector = {},
-	options = {},
-	replayDate,
-}: CollectionFindParams<DocType>) {
-	console.log('replayDate findOne', replayDate)
-	return (await collection.findOne(selector, options)) as DocType | undefined
+// helpers
+
+function holyFieldsGuard(docOrUpdate: any) {
+	const holyFields = ['_id', 'createdAt', 'updatedAt', 'initialInsert', 'updateHistory']
+
+	const protectedOperators = ['', '$set', '$push']
+
+	const docOrUpdateContainsHolyField = protectedOperators.some(po =>
+		holyFields.some(hf => _.get(docOrUpdate, po + hf))
+	)
+
+	if (docOrUpdateContainsHolyField) {
+		const errMsg = 'docOrUpdate contains holy field!'
+		log({ text: errMsg, data: docOrUpdate })
+		throw new Error(errMsg)
+	}
 }

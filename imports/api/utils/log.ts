@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { insertLog } from '/imports/api/collections/logs/logs.mutations'
-import type { Log } from '/imports/api/collections/logs/logs.types'
+import type { Log } from '/imports/api/collections/logs/logs.collection'
 import { C } from '/imports/startup/iso-constants'
 
 // ---

@@ -129,8 +129,8 @@ function holyFieldsGuard(docOrUpdate: any) {
 
 	const protectedOperators = ['', '$set', '$push']
 
-	const docOrUpdateContainsHolyField = protectedOperators.some(po =>
-		holyFields.some(hf => _.get(docOrUpdate, po + hf))
+	const docOrUpdateContainsHolyField = protectedOperators.some(operator =>
+		holyFields.some(field => _.get(docOrUpdate, operator ? `${operator}.${field}` : field))
 	)
 
 	if (docOrUpdateContainsHolyField) {

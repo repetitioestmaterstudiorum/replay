@@ -9,6 +9,12 @@ export type FindParams<DocType> = {
 	replayDate?: Date
 }
 
+export type FindOneParams<DocType> = {
+	_id: string
+	options?: Mongo.Options<DocWithDbFields<DocType>>
+	replayDate?: Date
+}
+
 export type CollectionParams<DocType> = {
 	collection: Collection<DocType>
 	replayCollection: ReplayCollection<DocType>

@@ -44,19 +44,29 @@ export function TaskList() {
 	// 	}
 	// }, [])
 
-	const isTasksLoading = useSubscribe('tasks', { replayDate })
+	// const isTasksLoading = replayDate
+	// 	? useSubscribe('tasksReplay', { replayDate })
+	// 	: useSubscribe('tasks')
+
+	// const tasksSub = Meteor.subscribe('tasks')
+
+	// const isTasksLoading = tasksSub.ready()
+	// console.log('isTasksLoading', isTasksLoading)
+
+	const isTasksLoading = useSubscribe('tasks')
 
 	const tasks =
 		useFind(() => {
 			if (userId) {
 				const selector = hideDone ? { isChecked: { $ne: true }, userId } : { userId }
+				console.log('replayDate inside useFind()', replayDate)
 
 				const collection = replayDate
-					? (TasksReplayCollection as Awaited<typeof TasksReplayCollection>)
-					: TasksCollection
+					? TasksCollection
+					: (TasksReplayCollection as Awaited<typeof TasksReplayCollection>)
 				return collection.find(selector, { sort: { createdAt: -1 } })
 			}
-		}, [hideDone, isTasksLoading()]) || []
+		}, [hideDone, replayDate, isTasksLoading()]) || []
 
 	return isUserLoading() || isTasksLoading() ? (
 		<h2>Loading :)</h2>

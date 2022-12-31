@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { insertTaskMM } from '/imports/api/collections/tasks/methods/tasks.insertTaskMM'
+import { callWithPromise } from '/imports/ui/ui.utils'
 
 // ---
 
@@ -10,7 +10,7 @@ export function AddTask() {
 		e.preventDefault()
 		if (!text) return
 
-		insertTaskMM({ text })
+		callWithPromise('insertTaskMM', { text })
 		setText('')
 	}
 

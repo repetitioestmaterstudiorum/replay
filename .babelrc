@@ -1,3 +1,0 @@
-{
-	"plugins": ["@zodern/babel-plugin-meteor-relay"]
-}

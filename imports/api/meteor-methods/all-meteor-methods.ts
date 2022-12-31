@@ -1,2 +1,2 @@
-import '/imports/api/collections/tasks/methods/tasks.meteor-methods'
-import '/imports/api/collections/users/methods/users.meteor-methods'
+import '/imports/api/collections/tasks/tasks.methods'
+import '/imports/api/collections/users/users.methods'

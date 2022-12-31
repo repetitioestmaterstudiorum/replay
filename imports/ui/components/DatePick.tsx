@@ -1,9 +1,8 @@
 import { useTracker } from 'meteor/react-meteor-data'
 import React from 'react'
 import DatePicker from 'react-date-picker'
-import { setReplayDate } from '/imports/api/collections/users/methods/users.setReplayDate'
-import { unsetReplayDate } from '/imports/api/collections/users/methods/users.unsetReplayDate'
 import type { User } from '/imports/api/collections/users/users.collection'
+import { callWithPromise } from '/imports/ui/ui.utils'
 
 // ---
 
@@ -15,9 +14,9 @@ export function DatePick() {
 			<DatePicker
 				onChange={(date: Date) => {
 					if (date === null || isToday(date)) {
-						unsetReplayDate()
+						callWithPromise('unsetReplayDateMM')
 					} else {
-						setReplayDate({ replayDate: date })
+						callWithPromise('setReplayDateMM', { replayDate: date })
 					}
 				}}
 				value={user?.uiState?.replayDate || new Date()}

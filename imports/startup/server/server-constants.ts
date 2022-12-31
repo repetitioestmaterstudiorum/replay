@@ -1,3 +1,4 @@
+import os from 'os'
 import { MemoryDb } from '/imports/startup/server/memory-db'
 import { C as isoC } from '/imports/startup/iso-constants'
 
@@ -5,6 +6,9 @@ import { C as isoC } from '/imports/startup/iso-constants'
 
 const constants = {
 	...isoC,
+	hostname: os.hostname(),
+	port: process.env.PORT || '3000',
+	env: process.env.NODE_ENV || 'unknown',
 	defaultAdmin: {
 		username: process.env.DEFAULT_ADMIN_USERNAME || 'meteorish',
 		password: process.env.DEFAULT_ADMIN_PASSWORD || '123456789',

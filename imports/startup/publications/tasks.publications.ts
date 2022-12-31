@@ -1,41 +1,26 @@
-// import { createPublication } from 'meteor/zodern:relay'
-import { z } from 'zod'
+import { Tracker } from 'meteor/tracker'
 import { findTasks } from '/imports/api/collections/tasks/tasks.getters'
+import { findOneUser } from '/imports/api/collections/users/users.getters'
 
 // ---
 
-const tasksPublicationSchema = z.object({ replayDate: z.date().optional() })
+Meteor.publish('tasks', async function () {
+	Tracker.autorun(() => {
+		if (this.userId) {
+			const replayDate = (await findOneUser({ _id: this.userId }))?.uiState?.replayDate
 
-// export const tasksPublication = createPublication({
-// 	schema: replayDateSchema,
-// 	async run({ replayDate }: z.infer<typeof replayDateSchema>) {
-// 		if (this.userId) {
-// 			const selector = {
-// 				userId: this.userId,
-// 				isDeleted: { $ne: true },
-// 			}
-// 			// const tasks = await findTasks({ selector, replayDate })
-// 			// return tasks
-// 			return await findTasks({ selector, replayDate })
-// 		} else {
-// 			this.ready()
-// 		}
-// 	},
-// })
+			console.log('replayDate publish', replayDate)
 
-Meteor.publish('tasks', async function ({ replayDate }: z.infer<typeof tasksPublicationSchema>) {
-	tasksPublicationSchema.parse({ replayDate })
-
-	if (this.userId) {
-		const selector = {
-			userId: this.userId,
-			isDeleted: { $ne: true },
+			const selector = {
+				userId: this.userId,
+				isDeleted: { $ne: true },
+			}
+			const tasks = await findTasks({ selector, replayDate })
+			console.log('publication tasks?.count()', tasks?.count())
+			return tasks
+			// return await findTasks({ selector, replayDate })
+		} else {
+			this.ready()
 		}
-		const tasks = await findTasks({ selector, replayDate })
-		console.log('publication tasks?.count()', tasks?.count())
-		return tasks
-		// return await findTasks({ selector, replayDate })
-	} else {
-		this.ready()
-	}
+	})
 })

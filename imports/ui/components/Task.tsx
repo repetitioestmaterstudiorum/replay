@@ -1,18 +1,17 @@
 import React from 'react'
-import { deleteTaskMM } from '/imports/api/collections/tasks/methods/tasks.deleteTaskMM'
-import { toggleTaskMM } from '/imports/api/collections/tasks/methods/tasks.toggleTaskMM'
 import type { Task } from '/imports/api/collections/tasks/tasks.collection'
 import { DocWithDbFields } from '/imports/api/db/db.types'
+import { callWithPromise } from '/imports/ui/ui.utils'
 
 // ---
 
 export function Task({ task }: { task: DocWithDbFields<Task> }) {
 	const toggleChecked = async (taskId: string, isChecked: boolean) => {
-		toggleTaskMM({ taskId, isChecked })
+		callWithPromise('toggleTaskMM', { taskId, isChecked })
 	}
 
 	const deleteTask = (taskId: string) => {
-		deleteTaskMM({ taskId })
+		callWithPromise('deleteTaskMM', { taskId })
 	}
 
 	return (

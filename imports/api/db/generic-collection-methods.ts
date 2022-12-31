@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import { Mongo } from 'meteor/mongo'
 import type { Collection } from '/imports/api/db/db.utils'
-import type { CollectionParams, DocWithDbFields, FindParams } from '/imports/api/db/db.types'
+import type { CollectionParams, DbDocType, FindParams } from '/imports/api/db/db.types'
 import { log } from '/imports/api/utils/log'
 
 // ---
@@ -34,7 +34,7 @@ export async function insert<DocType>(
 
 export async function update<DocType>(
 	collection: Collection<DocType>,
-	selector: Mongo.Selector<DocWithDbFields<DocType>>,
+	selector: Mongo.Selector<DbDocType<DocType>>,
 	update: Mongo.Modifier<DocType>,
 	replayable: boolean | undefined = true
 ) {

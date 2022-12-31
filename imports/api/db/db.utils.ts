@@ -1,10 +1,10 @@
 import { Mongo } from 'meteor/mongo'
-import type { DocWithDbFields } from '/imports/api/db/db.types'
+import type { DbDocType } from '/imports/api/db/db.types'
 
 // ---
 
 export function createCollection<DocType>(collectionName: string) {
-	return new Mongo.Collection<DocWithOptionalDbFields<DocType>, DocWithDbFields<DocType>>(
+	return new Mongo.Collection<DocWithOptionalDbFields<DocType>, DbDocType<DocType>>(
 		collectionName
 	)
 }
@@ -17,7 +17,7 @@ export async function createReplayCollection<DocType>(collectionName: string) {
 	const { C } = await import('/imports/startup/server/server-constants')
 
 	// the _driver argument is not Typed in Meteor's Mongo, but still works ... Found out on https://stackoverflow.com/questions/36353404/meteor-does-see-a-remote-mongodb-instance-with-mongointernals-remotecollectiondr
-	return new Mongo.Collection<DocWithOptionalDbFields<DocType>, DocWithDbFields<DocType>>(
+	return new Mongo.Collection<DocWithOptionalDbFields<DocType>, DbDocType<DocType>>(
 		collectionName,
 		{
 			// @ts-ignore
@@ -34,4 +34,4 @@ type ReplayCollectionReturnType<DocType> = any
 // TODO this should soon work in TS
 // type ReplayCollectionReturnType<DocType> = ReturnType<typeof createReplayCollection<DocType>>
 
-type DocWithOptionalDbFields<DocType> = Partial<DocWithDbFields<DocType>>
+type DocWithOptionalDbFields<DocType> = Partial<DbDocType<DocType>>

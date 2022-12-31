@@ -8,7 +8,7 @@ import { AddTask } from '/imports/ui/components/AddTask'
 import { Task } from '/imports/ui/components/Task'
 import { User } from '/imports/api/collections/users/users.collection'
 import { Meteor } from 'meteor/meteor'
-import { DocWithDbFields } from '/imports/api/db/db.types'
+import { DbDocType } from '/imports/api/db/db.types'
 import type { Task as TaskType } from '/imports/api/collections/tasks/tasks.collection'
 
 // ---
@@ -55,18 +55,28 @@ export function TaskList() {
 
 	const isTasksLoading = useSubscribe('tasks')
 
-	const tasks =
+	let tasks =
 		useFind(() => {
-			if (userId) {
-				const selector = hideDone ? { isChecked: { $ne: true }, userId } : { userId }
-				console.log('replayDate inside useFind()', replayDate)
+			console.log('userId', userId)
+			// if (userId) {
+			const selector = hideDone ? { isChecked: { $ne: true }, userId } : { userId }
+			console.log('replayDate inside useFind()', replayDate)
 
-				const collection = replayDate
-					? TasksCollection
-					: (TasksReplayCollection as Awaited<typeof TasksReplayCollection>)
-				return collection.find(selector, { sort: { createdAt: -1 } })
-			}
+			const collection = replayDate
+				? TasksCollection
+				: (TasksReplayCollection as Awaited<typeof TasksReplayCollection>)
+			console.log('collection', collection)
+			console.log(
+				'collection.find(selector, { sort: { createdAt: -1 } })',
+				collection.find(selector, { sort: { createdAt: -1 } })
+			)
+			return collection.find(selector, { sort: { createdAt: -1 } })
+			// }
 		}, [hideDone, replayDate, isTasksLoading()]) || []
+
+	tasks = TasksReplayCollection.find(selector, { sort: { createdAt: -1 } }).toArray()
+
+	console.log('tasks', tasks)
 
 	return isUserLoading() || isTasksLoading() ? (
 		<h2>Loading :)</h2>
@@ -80,7 +90,7 @@ export function TaskList() {
 			</div>
 			<ul>
 				{tasks.map(task => (
-					<Task key={task._id} task={task as DocWithDbFields<TaskType>} />
+					<Task key={task._id} task={task as DbDocType<TaskType>} />
 				))}
 			</ul>
 		</div>

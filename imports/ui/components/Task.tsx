@@ -1,11 +1,11 @@
 import React from 'react'
 import type { Task } from '/imports/api/collections/tasks/tasks.collection'
-import { DocWithDbFields } from '/imports/api/db/db.types'
+import { DbDocType } from '/imports/api/db/db.types'
 import { callWithPromise } from '/imports/ui/ui.utils'
 
 // ---
 
-export function Task({ task }: { task: DocWithDbFields<Task> }) {
+export function Task({ task }: { task: DbDocType<Task> }) {
 	const toggleChecked = async (taskId: string, isChecked: boolean) => {
 		callWithPromise('toggleTaskMM', { taskId, isChecked })
 	}

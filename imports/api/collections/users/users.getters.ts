@@ -22,8 +22,6 @@ export async function findOneUser({ _id, options }: FindOneParams<User>) {
 	const usersCursor = await findUsers({ selector: { _id }, options })
 	const usersCount = usersCursor.count()
 	if (usersCount === 1) {
-		return usersCursor.fetch()[0]
-	} else {
-		return undefined
+		return await usersCursor.fetch()[0]
 	}
 }

@@ -4,14 +4,14 @@ import type { Collection, ReplayCollection } from '/imports/api/db/db.utils'
 // ---
 
 export type FindParams<DocType> = {
-	selector?: Mongo.Selector<DocWithDbFields<DocType>>
-	options?: Mongo.Options<DocWithDbFields<DocType>>
+	selector?: Mongo.Selector<DbDocType<DocType>>
+	options?: Mongo.Options<DbDocType<DocType>>
 	replayDate?: Date
 }
 
 export type FindOneParams<DocType> = {
 	_id: string
-	options?: Mongo.Options<DocWithDbFields<DocType>>
+	options?: Mongo.Options<DbDocType<DocType>>
 	replayDate?: Date
 }
 
@@ -20,9 +20,9 @@ export type CollectionParams<DocType> = {
 	replayCollection: ReplayCollection<DocType>
 }
 
-export type DocWithDbFields<DocType> = DocType & DefaultDbFields<DocType>
+export type DbDocType<DocType> = DocType & MetaDbFields
 
-type DefaultDbFields<DocType> = MetaDbFields & ReplayDbFields<DocType>
+type DbDocTypeReplay<DocType> = DocType & MetaDbFields & ReplayDbFields<DocType>
 
 type MetaDbFields = {
 	_id: string

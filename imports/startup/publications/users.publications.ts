@@ -1,16 +1,16 @@
 import { Meteor } from 'meteor/meteor'
+import { findOneUser } from '/imports/api/collections/users/users.getters'
 
 // ---
 
 Meteor.publish('user', async function () {
-	// TODO use findOneUser
 	if (this.userId) {
-		return await Meteor.users.find(
-			{ _id: this.userId },
-			{
-				fields: { 'uiState.replayDate': 1 },
-			}
-		)
+		return await findOneUser({
+			_id: this.userId,
+			options: {
+				fields: { uiState: 1 },
+			},
+		})
 	} else {
 		this.ready()
 	}

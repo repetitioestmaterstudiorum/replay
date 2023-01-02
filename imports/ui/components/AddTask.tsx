@@ -1,17 +1,35 @@
 import React, { useState } from 'react'
+import { DbTask } from '/imports/api/collections/tasks/tasks.collection'
 import { callWithPromise } from '/imports/ui/ui.utils'
 
 // ---
 
-export function AddTask() {
-	const [text, setText] = useState('')
+export function AddTask(props: Props) {
+	const { userId, setTasks } = props
 
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+	const [text, setText] = useState<string>('')
+
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		if (!text) return
 
-		callWithPromise('insertTaskMM', { text })
-		setText('')
+		const newTaskId = await callWithPromise<DbTask['text'], string>('addTaskMM', text)
+
+		const timestamp = new Date()
+
+		if (newTaskId) {
+			const newTask = {
+				_id: newTaskId,
+				text,
+				createdAt: timestamp,
+				updatedAt: timestamp,
+				userId,
+				isChecked: false,
+				isDeleted: false,
+			}
+			setTasks(previousTasks => [...previousTasks, newTask])
+			setText('')
+		}
 	}
 
 	return (
@@ -27,3 +45,5 @@ export function AddTask() {
 		</form>
 	)
 }
+
+type Props = { userId: string; setTasks: React.Dispatch<React.SetStateAction<DbTask[]>> }

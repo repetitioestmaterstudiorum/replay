@@ -21,14 +21,13 @@ export async function insert<DocType>(
 		updatedAt: timestamp,
 	})
 
-	// prettier-ignore
-	const finalDocument = replayable ? _.assign(documentWithMetaFields, {
+	const finalDocument = replayable
+		? _.assign(documentWithMetaFields, {
 				initialInsert: _.cloneDeep(documentWithMetaFields),
 				updateHistory: [],
 		  })
 		: documentWithMetaFields
 
-	// @ts-ignore
 	return await collection.insert(finalDocument)
 }
 
@@ -83,6 +82,7 @@ export async function find<DocType>({
 		if (!C.memoryDb?.ready) return console.error(new Error('C.memoryDb.ready is false'))
 
 		const documents = await collection.find(selector, options)
+		console.log('documents', documents)
 
 		const memoryCollection = await replayCollection
 
@@ -102,6 +102,7 @@ export async function find<DocType>({
 			insertedDocumentIds.push(insertedDocumentId)
 
 			// apply all modifications
+			// TODO types
 			const relevantSortedModifyHistory =
 				doc.updateHistory
 					?.filter(mod => mod.timestamp <= replayDate)

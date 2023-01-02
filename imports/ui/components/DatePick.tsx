@@ -26,6 +26,6 @@ export function DatePick() {
 }
 
 function isToday(date: Date) {
-	const today = new Date()
-	return today.toDateString() === date.toDateString() ? true : false
+	const today = new Date().toDateString()
+	return today === date.toDateString() ? true : false
 }

@@ -6,6 +6,8 @@ import { Mongo } from 'meteor/mongo'
 // ---
 
 export async function insertTask({ userId, text }: Pick<Task, 'userId' | 'text'>) {
+	console.log('userId', userId)
+	console.log('text', text)
 	return await insert<Task>(TasksCollection, {
 		userId,
 		text,

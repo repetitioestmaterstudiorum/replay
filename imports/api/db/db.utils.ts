@@ -14,6 +14,8 @@ export type Collection<DocType> = any
 // export type Collection<DocType> = ReturnType<typeof createCollection<DocType>>
 
 export async function createReplayCollection<DocType>(collectionName: string) {
+	if (Meteor.isClient) return
+
 	const { C } = await import('/imports/startup/server/server-constants')
 
 	// the _driver argument is not Typed in Meteor's Mongo, but still works ... Found out on https://stackoverflow.com/questions/36353404/meteor-does-see-a-remote-mongodb-instance-with-mongointernals-remotecollectiondr

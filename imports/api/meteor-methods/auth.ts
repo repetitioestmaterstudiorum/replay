@@ -1,5 +1,4 @@
 import { Meteor } from 'meteor/meteor'
-import { z } from 'zod'
 import { findTasks } from '/imports/api/collections/tasks/tasks.getters'
 
 // ---
@@ -12,7 +11,6 @@ export function checkLoggedIn() {
 
 export async function checkUsersTask(taskId: string) {
 	const userId = checkLoggedIn()
-	z.string().parse(taskId)
 
 	const isUsersTask =
 		(
@@ -22,5 +20,5 @@ export async function checkUsersTask(taskId: string) {
 			})
 		).count() === 1
 
-	if (isUsersTask) throw new Error('Access denied.')
+	if (!isUsersTask) throw new Error('Access denied.')
 }

@@ -41,7 +41,7 @@ export const Tasks = () => {
 		}
 
 		fetchTasks()
-	}, [])
+	}, [userId, replayDate, hideDone])
 
 	return isUserLoading() || !userId ? (
 		<h2>Loading :)</h2>
@@ -52,7 +52,7 @@ export const Tasks = () => {
 			<AddTask userId={userId} setTasks={setTasks} />
 			<div className="filter">
 				<button onClick={() => callWithPromise('setHideDoneMM', !hideDone)}>
-					{hideDone ? 'Show Done' : 'Hide Done'}
+					{hideDone ? 'Show completed tasks' : 'Hide completed tasks'}
 				</button>
 			</div>
 			<TaskList tasks={tasks} setTasks={setTasks} />

@@ -82,7 +82,6 @@ export async function find<DocType>({
 		if (!C.memoryDb?.ready) return console.error(new Error('C.memoryDb.ready is false'))
 
 		const documents = await collection.find(selector, options)
-		console.log('documents', documents)
 
 		const memoryCollection = await replayCollection
 

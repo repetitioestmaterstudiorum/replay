@@ -19,7 +19,8 @@ Meteor.methods({
 })
 
 async function getCurrentTasks({ hideDone, replayDate }: GetCurrentTasksArgs) {
-	return await getTasks({ isDeleted: false, hideDone }, replayDate)
+	const selector = { isDeleted: false, ...(hideDone ? { isChecked: false } : undefined) }
+	return await getTasks(selector, replayDate)
 }
 
 export type GetCurrentTasksArgs = {
@@ -45,8 +46,7 @@ async function addTask(text: Task['text']) {
 
 	const userId = checkLoggedIn()
 
-	const taskInsertedSuccessfully = await insertTask({ userId, text })
-	return taskInsertedSuccessfully
+	return await insertTask({ userId, text })
 }
 
 async function toggleTask({ taskId, isChecked }: Pick<Task, 'isChecked'> & { taskId: string }) {

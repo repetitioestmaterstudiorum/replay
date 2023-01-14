@@ -7,12 +7,14 @@ import { Task } from '/imports/ui/components/Task'
 export function TaskList(props: Props) {
 	const { tasks, setTasks } = props
 
-	return (
+	return tasks.length ? (
 		<ul>
 			{tasks.map(task => {
 				return <Task key={task._id} task={task} setTasks={setTasks} />
 			})}
 		</ul>
+	) : (
+		<p>Loading ...</p>
 	)
 }
 

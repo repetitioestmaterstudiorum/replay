@@ -5,6 +5,8 @@ import { C } from '/imports/startup/server/server-constants'
 
 // ---
 
+// TODO add some tasks in the past for replayability demo
+// TODO move to collection logic
 Meteor.startup(async () => {
 	if ((await findTasks())?.count() === 0) {
 		const userId = Meteor.users.findOne({ username: C.defaultAdmin.username })?._id

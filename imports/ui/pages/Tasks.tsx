@@ -27,7 +27,8 @@ export const Tasks = () => {
 	}, [Meteor.userId()])
 
 	useEffect(() => {
-		const fetchTasks = async () => {
+		setTasks([])
+		async function fetchTasks() {
 			const tasks = await callWithPromise<GetCurrentTasksArgs, DbTask[]>(
 				'getCurrentTasksMM',
 				{

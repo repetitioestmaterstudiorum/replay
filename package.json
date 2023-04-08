@@ -9,7 +9,7 @@
     "test:app": "BROWSERSLIST_IGNORE_OLD_DATA=1 TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
     "test:full": "npm run lint && npm run tsc && npm test",
     "lint": "eslint imports/**/*.ts",
-    "tsc": "tsc -p tsconfig.json",
+    "tsc": "tsc --noEmit -p tsconfig.json",
     "reset": "meteor reset && rimraf package-lock.json && rimraf node_modules/ && meteor npm i"
   },
   "engines": {

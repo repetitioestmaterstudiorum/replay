@@ -10,7 +10,7 @@
     "test:full": "npm run lint && npm run tsc && npm test",
     "lint": "eslint imports/**/*.ts",
     "tsc": "tsc --noEmit -p tsconfig.json",
-    "reset": "meteor reset && rimraf package-lock.json && rimraf node_modules/ && meteor npm i"
+    "reset": "meteor reset && rimraf package-lock.json && rimraf node_modules/"
   },
   "engines": {
     "node": "^16"
